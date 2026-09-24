@@ -48,6 +48,19 @@
             <data android:mimeType="text/plain"/>
         </intent>
         <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https" android:host="www.youtube.com"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https" android:host="youtu.be"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="vnd.youtube"/>
+        </intent>
+        <package android:name="com.google.android.youtube"/>
+        <intent>
             <action android:name="android.intent.action.GET_CONTENT"/>
         </intent>
         <intent>
