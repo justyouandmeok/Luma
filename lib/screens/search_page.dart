@@ -35,7 +35,7 @@ class _SearchPageState extends State<SearchPage> {
               textInputAction: TextInputAction.search,
               onSubmitted: ps.search,
               decoration: InputDecoration(
-                hintText: 'Canción, artista o video',
+                hintText: 'Canción, artista o link de YouTube',
                 filled: true,
                 fillColor: OndaColors.card,
                 prefixIcon: const Icon(Icons.search),

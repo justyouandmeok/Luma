@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../models/track.dart';
 import 'settings_store.dart';
+import 'catalog.dart';
 import 'youtube_api.dart';
 
 class PlayerState extends ChangeNotifier {
@@ -26,9 +27,7 @@ class PlayerState extends ChangeNotifier {
     final raw = await store.favJson();
     favorites = raw.map((s) => Track.fromJson(jsonDecode(s) as Map<String, dynamic>)).toList();
     notifyListeners();
-    if (apiKey.isNotEmpty) {
-      await loadTrending();
-    }
+    await loadTrending();
   }
 
   Future<void> saveKey(String key) async {
@@ -44,8 +43,10 @@ class PlayerState extends ChangeNotifier {
     notifyListeners();
     try {
       trending = await api.trendingMusic();
+      if (trending.isEmpty) trending = List.of(demoCatalog);
     } catch (e) {
-      error = e.toString();
+      error = 'API YouTube bloqueada. Usando catálogo local. Activá YouTube Data API v3 en Google Cloud.\n$e';
+      trending = List.of(demoCatalog);
     }
     loading = false;
     notifyListeners();
@@ -63,8 +64,14 @@ class PlayerState extends ChangeNotifier {
     try {
       results = await api.search(q.trim());
     } catch (e) {
-      error = e.toString();
-      results = [];
+      error = 'No se pudo buscar con la API. Probá un link de YouTube o el catálogo del inicio.\n$e';
+      final id = videoIdFromInput(q);
+      if (id != null) {
+        results = [Track(id: id, title: 'Video $id', channel: 'YouTube', thumb: 'https://i.ytimg.com/vi/$id/hqdefault.jpg')];
+      } else {
+        final ql = q.trim().toLowerCase();
+        results = demoCatalog.where((t) => t.title.toLowerCase().contains(ql) || t.channel.toLowerCase().contains(ql)).toList();
+      }
     }
     loading = false;
     notifyListeners();
