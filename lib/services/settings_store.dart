@@ -6,7 +6,7 @@ class SettingsStore {
 
   Future<String> apiKey() async {
     final p = await SharedPreferences.getInstance();
-    return p.getString(_kApi) ?? 'AIzaSyDoRRon52y_JtgbpKIrCRNLQtQwVRSj81c';
+    return p.getString(_kApi) ?? 'AIzaSyDv-fJh7gR0BVBjXoc9oW4X5Iir73fHQQY';
   }
 
   Future<void> setApiKey(String key) async {
