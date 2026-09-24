@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart' hide PlayerState;
 
 import '../services/player_state.dart';
 import '../theme.dart';
@@ -73,11 +73,10 @@ class _PlayerPageState extends State<PlayerPage> {
                     IconButton(iconSize: 36, onPressed: ps.playPrev, icon: const Icon(Icons.skip_previous)),
                     IconButton(
                       iconSize: 56,
-                      onPressed: () async {
-                        if (_yt == null) return;
-                        await _yt!.toggleFullScreen();
+                      onPressed: () {
+                        _yt?.playVideo();
                       },
-                      icon: const Icon(Icons.fullscreen),
+                      icon: const Icon(Icons.play_circle),
                     ),
                     IconButton(iconSize: 36, onPressed: ps.playNext, icon: const Icon(Icons.skip_next)),
                   ],
