@@ -8,6 +8,7 @@ import 'library_page.dart';
 import 'player_page.dart';
 import 'search_page.dart';
 import 'settings_page.dart';
+import 'youtube_web_page.dart';
 
 class Shell extends StatefulWidget {
   const Shell({super.key});
@@ -21,7 +22,7 @@ class _ShellState extends State<Shell> {
   @override
   Widget build(BuildContext context) {
     final current = context.watch<PlayerState>().current;
-    final pages = const [HomePage(), SearchPage(), LibraryPage(), SettingsPage()];
+    final pages = const [HomePage(), YoutubeWebPage(), SearchPage(), LibraryPage(), SettingsPage()];
     return Scaffold(
       body: IndexedStack(index: tab, children: pages),
       bottomNavigationBar: Column(
@@ -43,6 +44,7 @@ class _ShellState extends State<Shell> {
             onDestinationSelected: (i) => setState(() => tab = i),
             destinations: const [
               NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Inicio'),
+              NavigationDestination(icon: Icon(Icons.play_circle_outline), selectedIcon: Icon(Icons.play_circle), label: 'YouTube'),
               NavigationDestination(icon: Icon(Icons.search), selectedIcon: Icon(Icons.search), label: 'Buscar'),
               NavigationDestination(icon: Icon(Icons.library_music_outlined), selectedIcon: Icon(Icons.library_music), label: 'Biblioteca'),
               NavigationDestination(icon: Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings), label: 'Ajustes'),
