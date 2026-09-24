@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../services/player_state.dart';
 import '../theme.dart';
@@ -18,14 +18,14 @@ class _PlayerPageState extends State<PlayerPage> {
 
   void _bind(String id) {
     if (_boundId == id && _yt != null) return;
-    _yt?.dispose();
-    _yt = YoutubePlayerController(
-      initialVideoId: id,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
+    _yt?.close();
+    _yt = YoutubePlayerController.fromVideoId(
+      videoId: id,
+      autoPlay: true,
+      params: const YoutubePlayerParams(
         mute: false,
-        enableCaption: false,
-        forceHD: false,
+        showFullscreenButton: true,
+        strictRelatedVideos: true,
       ),
     );
     _boundId = id;
@@ -33,7 +33,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
   @override
   void dispose() {
-    _yt?.dispose();
+    _yt?.close();
     super.dispose();
   }
 
@@ -57,12 +57,7 @@ class _PlayerPageState extends State<PlayerPage> {
       ),
       body: Column(
         children: [
-          YoutubePlayer(
-            controller: _yt!,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: OndaColors.accent,
-            onEnded: (_) => context.read<PlayerState>().playNext(),
-          ),
+          YoutubePlayer(controller: _yt!),
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -78,16 +73,11 @@ class _PlayerPageState extends State<PlayerPage> {
                     IconButton(iconSize: 36, onPressed: ps.playPrev, icon: const Icon(Icons.skip_previous)),
                     IconButton(
                       iconSize: 56,
-                      onPressed: () {
+                      onPressed: () async {
                         if (_yt == null) return;
-                        if (_yt!.value.isPlaying) {
-                          _yt!.pause();
-                        } else {
-                          _yt!.play();
-                        }
-                        setState(() {});
+                        await _yt!.toggleFullScreen();
                       },
-                      icon: Icon(_yt?.value.isPlaying == true ? Icons.pause_circle : Icons.play_circle),
+                      icon: const Icon(Icons.fullscreen),
                     ),
                     IconButton(iconSize: 36, onPressed: ps.playNext, icon: const Icon(Icons.skip_next)),
                   ],
