@@ -25,6 +25,8 @@ class YoutubeApi {
       'part': 'snippet',
       'type': 'video',
       'videoCategoryId': '10',
+      'videoEmbeddable': 'true',
+      'videoSyndicated': 'true',
       'maxResults': '$max',
       'q': query,
       'key': apiKey,
